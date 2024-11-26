@@ -8,7 +8,7 @@ const swaggerJsDoc = require("swagger-jsdoc");
 const cors = require("cors")
 const ExpressEjsLayouts = require("express-ejs-layouts")
 require("dotenv").config()
-const { AllRoutes } = require("./router/router");
+const { AllRoutes } = require("../router/router");
 const { initialSocket } = require("./utils/initSocket");
 const { socketHandler } = require("./socket.io");
 const session = require("express-session")
@@ -47,14 +47,14 @@ module.exports = class Application {
           swaggerDefinition: {
             openapi: "3.0.0",
             info: {
-              title: "Boto Start Store",
+              title: "online Store",
               version: "2.0.0",
               description:
-                "بزرگترین مرجع آموزش برنامه نویسی و فروش محصولات جذاب برای برنامه نویسان",
+                "online shop",
               contact: {
-                name: "Erfan Yousefi",
+                name: "nawa",
                 url: "https://freerealapi.com",
-                email: "erfanyousefi.co@gmail.com",
+                email: "",
               },
             },
             servers: [
@@ -93,10 +93,11 @@ module.exports = class Application {
     });
   }
   connectToMongoDB() {
-    mongoose.connect(this.#DB_URI, (error) => {
-      if (!error) return console.log("conected to MongoDB");
-      return console.log(error.message);
-    });
+    mongoose.connect(this.#DB_URI).then(() =>{
+      console.log("conected to MongoDB")
+    }).catch((err) => {
+      console.log('got error with connecting to database error : ' + err);
+    })
     mongoose.connection.on("connected", () => {
       console.log("mongoose connected to DB");
     });
@@ -140,7 +141,7 @@ module.exports = class Application {
   }
   errorHandling() {
     this.#app.use((req, res, next) => {
-      next(createError.NotFound("آدرس مورد نظر یافت نشد"));
+      next(createError.NotFound("this route not found"));
     });
     this.#app.use((error, req, res, next) => {
       const serverError = createError.InternalServerError();
