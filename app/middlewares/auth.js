@@ -11,7 +11,7 @@ async function checkLogin(req, res, next){
             }
         }
         return res.render("login.ejs", {
-            error : "شما باید وارد حساب کاربری خود شوید"
+            error : "you should login to your account"
         })
     } catch (error) {
         next(error)
